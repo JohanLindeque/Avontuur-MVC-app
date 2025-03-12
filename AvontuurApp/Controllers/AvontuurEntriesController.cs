@@ -46,5 +46,47 @@ namespace AvontuurApp.Controllers
 
             return View(obj);
         }
+
+        // new action to edit entry
+        [HttpGet]
+        public IActionResult Edit(int? id)
+        {
+            if (id == null || id == 0)
+            {
+                return NotFound();
+            }
+
+            AvontuurEntry? avontuurEntry = _db.AvontuurEntries.Find(id);
+
+            if (avontuurEntry == null)
+            {
+                return NotFound();
+            }
+
+            return View(avontuurEntry);
+        }
+
+        [HttpPost]
+        public IActionResult Edit(AvontuurEntry obj)
+        {
+            if(obj != null && obj.Title.Length < 3)
+            {
+                ModelState.AddModelError("Title", "Title to short.");
+            }
+
+            if (ModelState.IsValid)
+            {
+                _db.AvontuurEntries.Update(obj); // update entry
+                _db.SaveChanges();// saves entry to db
+
+                return RedirectToAction("Index");
+            }
+
+            return View(obj);
+        }
+
+       
+
+       
     }
 }
