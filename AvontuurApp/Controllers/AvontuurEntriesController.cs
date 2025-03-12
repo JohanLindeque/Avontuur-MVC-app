@@ -47,7 +47,7 @@ namespace AvontuurApp.Controllers
             return View(obj);
         }
 
-        // new action to edit entry
+        // new actions to edit entry
         [HttpGet]
         public IActionResult Edit(int? id)
         {
@@ -85,8 +85,34 @@ namespace AvontuurApp.Controllers
             return View(obj);
         }
 
-       
+        // new actions for delete
+        [HttpGet]
+        public IActionResult Delete(int? id)
+        {
+            if (id == null || id == 0)
+            {
+                return NotFound();
+            }
 
-       
+            AvontuurEntry? avontuurEntry = _db.AvontuurEntries.Find(id);
+
+            if (avontuurEntry == null)
+            {
+                return NotFound();
+            }
+
+            return View(avontuurEntry);
+        }
+
+        [HttpPost]
+        public IActionResult Delete(AvontuurEntry obj)
+        {
+                _db.AvontuurEntries.Remove(obj); // remove entry from db
+                _db.SaveChanges();// saves entry to db
+
+                return RedirectToAction("Index");
+        }
+
+
     }
 }
