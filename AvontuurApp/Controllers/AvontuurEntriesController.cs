@@ -19,5 +19,21 @@ namespace AvontuurApp.Controllers
 
             return View(objAvontuurEntryList);
         }
+
+        // new action to open Create avontuur entry view
+        public IActionResult Create()
+        {
+            return View();
+        }
+
+        //new action to post new entry
+        [HttpPost]
+        public IActionResult Create(AvontuurEntry obj)
+        {
+            _db.AvontuurEntries.Add(obj); // add new entry
+            _db.SaveChanges();// saves entry to db
+
+            return RedirectToAction("Index");
+        }
     }
 }
