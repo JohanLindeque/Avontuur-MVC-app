@@ -30,10 +30,21 @@ namespace AvontuurApp.Controllers
         [HttpPost]
         public IActionResult Create(AvontuurEntry obj)
         {
-            _db.AvontuurEntries.Add(obj); // add new entry
-            _db.SaveChanges();// saves entry to db
+            // server side validation
+            if (obj != null && obj.Title.Length < 3)
+            {
+                ModelState.AddModelError("Title", "Title to short.");
+            }
 
-            return RedirectToAction("Index");
+            if (ModelState.IsValid)
+            {
+                _db.AvontuurEntries.Add(obj); // add new entry
+                _db.SaveChanges();// saves entry to db
+
+                return RedirectToAction("Index");
+            }
+
+            return View(obj);
         }
     }
 }
